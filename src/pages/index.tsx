@@ -12,27 +12,30 @@ const Home: NextPage = () => {
   const [attempt, setAttempt] = useState<string>('');
 
   const handleKey = (e: KeyboardEvent): void => {
-    if (attempt.length === 5) return;
     const key = e.key.toLowerCase();
 
-    if (key === 'enter') {
-      // TODO
+    if (key === 'backspace') {
+      setAttempt(attempt.slice(0, attempt.length - 1));
       return;
     }
-    if (key === 'backspace') {
-      // TODO
+    if (key === 'enter') {
+      if (attempt.length === 5) {
+        // TODO start animation
+        setHistory((_history) => _history.concat(attempt));
+        setAttempt('');
+      }
       return;
     }
 
-    if (/^[a-z]{1}$/.test(key)) {
+    if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
       setAttempt((attempt) => (attempt += key));
     }
   };
 
   useEffect(() => {
-    window.addEventListener('keypress', handleKey);
+    window.addEventListener('keydown', handleKey);
     return () => {
-      window.removeEventListener('keypress', handleKey);
+      window.removeEventListener('keydown', handleKey);
     };
   });
 
@@ -58,7 +61,11 @@ const Home: NextPage = () => {
                   const colId = `cell-${rowIdx}-${colIdx}`;
                   return (
                     <div id={colId} key={colId} className={styles.cell}>
-                      {rowIdx === history.length && (attempt[colIdx] || '')}
+                      {history[rowIdx]
+                        ? history[rowIdx][colIdx]
+                        : rowIdx === history.length
+                        ? attempt[colIdx]
+                        : ''}
                     </div>
                   );
                 })}
