@@ -41,7 +41,7 @@ const Home: NextPage = () => {
         alert('not in the list m8');
         return;
       }
-      animateReveal(secret, attempt);
+      animateReveal(secret, attempt, history);
       setHistory((_history) => _history.concat(attempt));
       setAttempt('');
       if (attempt === secret || history.length === 5) {

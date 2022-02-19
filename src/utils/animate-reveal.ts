@@ -3,7 +3,11 @@ import appendStyle from './append-style';
 
 import animations from '../styles/Animations.module.css';
 
-const animateReveeal = (secret: string, guess: string): void => {
+const animateReveeal = (
+  secret: string,
+  guess: string,
+  history: string[]
+): void => {
   const row = document.getElementById(`row-${history.length}`);
   if (!row) return;
   const letters = row.childNodes as NodeListOf<HTMLElement>;
