@@ -3,7 +3,7 @@ import appendStyle from './append-style';
 
 import animations from '../styles/Animations.module.css';
 
-const animateReveeal = (
+const animateReveal = (
   secret: string,
   guess: string,
   history: string[]
@@ -25,4 +25,4 @@ const animateReveeal = (
   }
 };
 
-export default animateReveeal;
+export default animateReveal;
