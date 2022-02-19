@@ -1,0 +1,18 @@
+.reveal {
+  border: 1px solid #222;
+
+  animation-name: flip;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(45deg);
+  }
+
+  25% {
+    transform: rotateX(90deg);
+  }
+}
