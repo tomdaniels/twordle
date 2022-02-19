@@ -44,8 +44,11 @@ const Home: NextPage = () => {
       animateReveal(secret, attempt, history);
       setHistory((_history) => _history.concat(attempt));
       setAttempt('');
-      if (attempt === secret || history.length === 5) {
+      if (attempt === secret) {
         setStatus('complete');
+      }
+      if (history.length === 5 && attempt !== secret) {
+        setTimeout(() => alert(secret + ' ;)'), 1250);
       }
     } else if (/^[a-z]{1}$/.test(key)) {
       setAttempt((attempt) => (attempt += key));
