@@ -38,6 +38,7 @@ function getBgColor(attempt: string, i: number) {
 }
 
 const Home: NextPage = () => {
+  const [status, setStatus] = useState<'complete' | 'inprogress'>('inprogress');
   const [history, setHistory] = useState<string[]>([]);
   const [attempt, setAttempt] = useState<string>('');
 
@@ -57,7 +58,7 @@ const Home: NextPage = () => {
   };
 
   const handleKey = (e: KeyboardEvent): void => {
-    if (history.length >= 6) return;
+    if (status === 'complete') return;
     const key = e.key.toLowerCase();
 
     if (key === 'backspace') {
@@ -74,7 +75,10 @@ const Home: NextPage = () => {
       reveal(attempt);
       setHistory((_history) => _history.concat(attempt));
       setAttempt('');
-    } else if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
+      if (attempt === secret || history.length === 5) {
+        setStatus('complete');
+      }
+    } else if (/^[a-z]{1}$/.test(key)) {
       setAttempt((attempt) => (attempt += key));
     }
   };
