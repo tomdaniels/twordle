@@ -16,7 +16,10 @@ const animateReveeal = (
     setTimeout(() => {
       appendStyle(letters[i], animations.reveal);
       setTimeout(() => {
-        letters[i].setAttribute('style', `background-color: ${bgColor}`);
+        letters[i].setAttribute(
+          'style',
+          `background-color: ${bgColor}; border: 1px solid #222`
+        );
       }, 125);
     }, i * 250);
   }

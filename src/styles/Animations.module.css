@@ -1,6 +1,4 @@
 .reveal {
-  border: 1px solid #222;
-
   animation-name: flip;
   animation-duration: 0.5s;
   animation-timing-function: ease-out;
