@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
 import animateReveal from '../utils/animate-reveal';
 import styles from '../styles/Home.module.css';
+import decrypt from '../utils/decrypt';
+import randomInt from '../utils/random-int';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
 let columns: number[] = [0, 1, 2, 3, 4];
 
-const wordList = [
-  'hello',
-  'piano',
-  'pizza',
-  'patio',
-  'aroma',
-  'trick',
-  'unzip',
-];
+type WordleProps = {
+  wordlist: string;
+};
 
-const randomIdx = Math.floor(Math.random() * wordList.length);
-const secret = wordList[randomIdx];
-
-const Home: NextPage = () => {
+const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [status, setStatus] = useState<'complete' | 'inprogress'>('inprogress');
   const [history, setHistory] = useState<string[]>([]);
   const [attempt, setAttempt] = useState<string>('');
 
+  const { words, secret } = useMemo(() => {
+    const words = decrypt(wordlist);
+    const secret = words[randomInt(words.length)];
+    return { words, secret };
+  }, []);
+
   const handleKey = (e: KeyboardEvent): void => {
+    console.log(secret);
     if (status === 'complete') return;
     const key = e.key.toLowerCase();
 
@@ -37,7 +37,7 @@ const Home: NextPage = () => {
       if (attempt.length < 5) {
         return;
       }
-      if (!wordList.includes(attempt)) {
+      if (!words.includes(attempt)) {
         alert('not in the list m8');
         return;
       }
@@ -100,5 +100,17 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  const { wordlist } = await (
+    await fetch('https://word-api.vercel.app/api/words')
+  ).json();
+
+  return {
+    props: {
+      wordlist,
+    },
+  };
+}
 
 export default Home;
