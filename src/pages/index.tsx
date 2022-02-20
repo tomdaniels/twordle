@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
+import useEncryptedList from '../utils/use-encrypted-list';
 import animateReveal from '../utils/animate-reveal';
 import styles from '../styles/Home.module.css';
-import decrypt from '../utils/decrypt';
-import randomInt from '../utils/random-int';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
 let columns: number[] = [0, 1, 2, 3, 4];
@@ -18,15 +17,9 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [status, setStatus] = useState<'complete' | 'inprogress'>('inprogress');
   const [history, setHistory] = useState<string[]>([]);
   const [attempt, setAttempt] = useState<string>('');
-
-  const { words, secret } = useMemo(() => {
-    const words = decrypt(wordlist);
-    const secret = words[randomInt(words.length)];
-    return { words, secret };
-  }, []);
+  const { words, secret } = useEncryptedList(wordlist);
 
   const handleKey = (e: KeyboardEvent): void => {
-    console.log(secret);
     if (status === 'complete') return;
     const key = e.key.toLowerCase();
 
@@ -50,7 +43,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
       if (history.length === 5 && attempt !== secret) {
         setTimeout(() => alert(secret + ' ;)'), 1250);
       }
-    } else if (/^[a-z]{1}$/.test(key)) {
+    } else if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
       setAttempt((attempt) => (attempt += key));
     }
   };
