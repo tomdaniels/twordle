@@ -18,7 +18,7 @@ const animateReveal = (
       setTimeout(() => {
         letters[i].setAttribute(
           'style',
-          `background-color: ${bgColor}; border: 1px solid ${bgColor}`
+          `background-color: ${bgColor}; border: 2px solid ${bgColor}`
         );
       }, 125);
     }, i * 250);

@@ -4,6 +4,9 @@ import Head from 'next/head';
 
 import useEncryptedList from '../utils/use-encrypted-list';
 import animateReveal from '../utils/animate-reveal';
+import animatePress from '../utils/animate-press';
+import getCell from '../utils/get-cell';
+
 import styles from '../styles/Home.module.css';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
@@ -24,6 +27,10 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
     const key = e.key.toLowerCase();
 
     if (key === 'backspace') {
+      const cell = getCell(attempt.slice(0, attempt.length - 1), history);
+      if (cell) {
+        cell.style.border = '2px solid #3a3a3a';
+      }
       setAttempt(attempt.slice(0, attempt.length - 1));
       return;
     } else if (key === 'enter') {
@@ -44,7 +51,8 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         setTimeout(() => alert(secret + ' ;)'), 1250);
       }
     } else if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
-      setAttempt((attempt) => (attempt += key));
+      animatePress(attempt, history);
+      setAttempt((_attempt) => (_attempt += key));
     }
   };
 
