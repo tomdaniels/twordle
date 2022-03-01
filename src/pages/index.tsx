@@ -24,10 +24,20 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [attempt, setAttempt] = useState<string>('');
   const { words, secret } = useEncryptedList(wordlist);
 
-  const handleKey = (e: KeyboardEvent): void => {
+  useEffect(() => {
+    window.addEventListener('keyup', onKeyPress);
+    return () => {
+      window.removeEventListener('keyup', onKeyPress);
+    };
+  });
+
+  const onKeyPress = (e: KeyboardEvent): void => {
     if (status === 'complete') return;
     const key = e.key.toLowerCase();
+    handleKey(key);
+  };
 
+  const handleKey = (key: string) => {
     if (key === 'backspace') {
       const cell = getCell(attempt.slice(0, attempt.length - 1), history);
       if (cell) {
@@ -57,13 +67,6 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
       setAttempt((_attempt) => (_attempt += key));
     }
   };
-
-  useEffect(() => {
-    window.addEventListener('keyup', handleKey);
-    return () => {
-      window.removeEventListener('keyup', handleKey);
-    };
-  });
 
   return (
     <div>
