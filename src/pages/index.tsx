@@ -6,6 +6,7 @@ import useEncryptedList from '../utils/use-encrypted-list';
 import animateReveal from '../utils/animate-reveal';
 import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
+import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
 
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
@@ -22,6 +23,9 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [status, setStatus] = useState<'complete' | 'inprogress'>('inprogress');
   const [history, setHistory] = useState<string[]>([]);
   const [attempt, setAttempt] = useState<string>('');
+  const [bestColours, setBestColours] = useState<Map<string, string>>(
+    () => new Map()
+  );
   const { words, secret } = useEncryptedList(wordlist);
 
   useEffect(() => {
@@ -54,7 +58,15 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         return;
       }
       animateReveal(secret, attempt, history);
-      setHistory((_history) => _history.concat(attempt));
+      const nextHistory = [...history, attempt];
+      setHistory(nextHistory);
+      updateKeyboardAfterAnimation(
+        nextHistory,
+        secret,
+        (colours: Map<string, string>) => {
+          setBestColours(colours);
+        }
+      );
       setAttempt('');
       if (attempt === secret) {
         setStatus('complete');
@@ -106,15 +118,18 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
           <KeyboardRow
             letters="qwertyuiop"
             handleClick={(letter: string) => handleKey(letter)}
+            setColour={(letter: string) => bestColours.get(letter)}
           />
           <KeyboardRow
             letters="asdfghjkl"
             handleClick={(letter: string) => handleKey(letter)}
+            setColour={(letter: string) => bestColours.get(letter)}
           />
           <KeyboardRow
             letters="zxcvbnm"
             isLast
             handleClick={(letter: string) => handleKey(letter)}
+            setColour={(letter: string) => bestColours.get(letter)}
           />
         </div>
       </div>
