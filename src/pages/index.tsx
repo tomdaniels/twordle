@@ -103,9 +103,19 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
           })}
         </div>
         <div className={styles.keyboard}>
-          <KeyboardRow letters="qwertyuiop" />
-          <KeyboardRow letters="asdfghjkl" />
-          <KeyboardRow letters="zxcvbnm" isLast />
+          <KeyboardRow
+            letters="qwertyuiop"
+            handleClick={(letter: string) => handleKey(letter)}
+          />
+          <KeyboardRow
+            letters="asdfghjkl"
+            handleClick={(letter: string) => handleKey(letter)}
+          />
+          <KeyboardRow
+            letters="zxcvbnm"
+            isLast
+            handleClick={(letter: string) => handleKey(letter)}
+          />
         </div>
       </div>
     </div>
