@@ -7,6 +7,8 @@ import animateReveal from '../utils/animate-reveal';
 import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
 
+import KeyboardRow from '../components/keyboard-row/keyboard-row';
+
 import styles from '../styles/Home.module.css';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
@@ -96,6 +98,11 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
               </div>
             );
           })}
+        </div>
+        <div className={styles.keyboard}>
+          <KeyboardRow letters="qwertyuiop" />
+          <KeyboardRow letters="asdfghjkl" />
+          <KeyboardRow letters="zxcvbnm" isLast />
         </div>
       </div>
     </div>

@@ -30,3 +30,9 @@
   line-height: 75px;
   border: 2px solid #3a3a3c;
 }
+
+.keyboard {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+}
