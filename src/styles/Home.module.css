@@ -1,5 +1,9 @@
 .container {
+  height: 100vh;
+  display: flex;
   text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .small {
@@ -29,4 +33,14 @@
   font-size: 60px;
   line-height: 75px;
   border: 2px solid #3a3a3c;
+}
+
+.keyboard {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 30px auto;
+}
+
+.keyboard > div:nth-child(2) {
+  width: 90%;
 }

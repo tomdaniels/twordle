@@ -6,6 +6,9 @@ import useEncryptedList from '../utils/use-encrypted-list';
 import animateReveal from '../utils/animate-reveal';
 import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
+import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
+
+import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
 
@@ -20,12 +23,25 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [status, setStatus] = useState<'complete' | 'inprogress'>('inprogress');
   const [history, setHistory] = useState<string[]>([]);
   const [attempt, setAttempt] = useState<string>('');
+  const [bestColours, setBestColours] = useState<Map<string, string>>(
+    () => new Map()
+  );
   const { words, secret } = useEncryptedList(wordlist);
 
-  const handleKey = (e: KeyboardEvent): void => {
+  useEffect(() => {
+    window.addEventListener('keyup', onKeyPress);
+    return () => {
+      window.removeEventListener('keyup', onKeyPress);
+    };
+  });
+
+  const onKeyPress = (e: KeyboardEvent): void => {
     if (status === 'complete') return;
     const key = e.key.toLowerCase();
+    handleKey(key);
+  };
 
+  const handleKey = (key: string) => {
     if (key === 'backspace') {
       const cell = getCell(attempt.slice(0, attempt.length - 1), history);
       if (cell) {
@@ -42,7 +58,15 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         return;
       }
       animateReveal(secret, attempt, history);
-      setHistory((_history) => _history.concat(attempt));
+      const nextHistory = [...history, attempt];
+      setHistory(nextHistory);
+      updateKeyboardAfterAnimation(
+        nextHistory,
+        secret,
+        (colours: Map<string, string>) => {
+          setBestColours(colours);
+        }
+      );
       setAttempt('');
       if (attempt === secret) {
         setStatus('complete');
@@ -56,13 +80,6 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener('keyup', handleKey);
-    return () => {
-      window.removeEventListener('keyup', handleKey);
-    };
-  });
-
   return (
     <div>
       <Head>
@@ -71,10 +88,12 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
-        <h1>
-          <small className={styles.small}>my clone of</small> Wordle
-        </h1>
-        <div className={styles.divider} />
+        <div>
+          <h1>
+            <small className={styles.small}>my clone of</small> Wordle
+          </h1>
+          <div className={styles.divider} />
+        </div>
 
         <div className={styles.gridWrapper}>
           {rows.map((rowIdx) => {
@@ -96,6 +115,24 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
               </div>
             );
           })}
+        </div>
+        <div className={styles.keyboard}>
+          <KeyboardRow
+            letters="qwertyuiop"
+            handleClick={(letter: string) => handleKey(letter)}
+            setColour={(letter: string) => bestColours.get(letter)}
+          />
+          <KeyboardRow
+            letters="asdfghjkl"
+            handleClick={(letter: string) => handleKey(letter)}
+            setColour={(letter: string) => bestColours.get(letter)}
+          />
+          <KeyboardRow
+            letters="zxcvbnm"
+            isLast
+            handleClick={(letter: string) => handleKey(letter)}
+            setColour={(letter: string) => bestColours.get(letter)}
+          />
         </div>
       </div>
     </div>
