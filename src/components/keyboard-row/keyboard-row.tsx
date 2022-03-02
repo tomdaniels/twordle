@@ -3,7 +3,7 @@ import { withMedia } from 'react-media-query-hoc';
 
 import styles from '../../styles/Keyboard.module.css';
 
-type Media = {
+type ActiveMedia = {
   mobile: boolean;
   tablet: boolean;
   desktop: boolean;
@@ -15,7 +15,7 @@ type KeyboardRowProps = {
   handleClick: Function;
   letters: string;
   isLast?: boolean;
-  media: Media;
+  media: ActiveMedia;
 };
 
 const KeyboardRow: React.FC<KeyboardRowProps> = ({
