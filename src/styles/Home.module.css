@@ -1,5 +1,9 @@
 .container {
+  height: 100vh;
+  display: flex;
   text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .small {
@@ -32,6 +36,5 @@
 }
 
 .keyboard {
-  width: 95%;
-  margin: 0 auto;
+  margin: 0 auto 30px auto;
 }
