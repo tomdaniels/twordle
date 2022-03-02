@@ -1,8 +1,21 @@
+.keyboardRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 8px;
+}
+
 .keyboardButton {
-  padding: 26px 24px;
-  margin: 2px;
-  border: none;
-  border-radius: 3px;
-  background-color: #818384;
+  height: calc(5vh + 22px);
+  width: calc(8vw + 8px);
   color: #fff;
+  background-color: #818384;
+  border-radius: 4px;
+  padding: 0;
+  border: 0;
+  margin: 0 6px 0 0;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
 }

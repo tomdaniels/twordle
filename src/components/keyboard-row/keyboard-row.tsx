@@ -16,10 +16,11 @@ const KeyboardRow: React.FC<KeyboardRowProps> = ({
   isLast = false,
 }) => {
   return (
-    <div className={styles.keyboard}>
+    <div className={styles.keyboardRow}>
       {isLast && (
         <button
           className={styles.keyboardButton}
+          style={{ width: 'auto', padding: '0 12px' }}
           onClick={() => handleClick('enter')}
         >
           ENTER
@@ -32,12 +33,13 @@ const KeyboardRow: React.FC<KeyboardRowProps> = ({
           className={styles.keyboardButton}
           onClick={() => handleClick(l)}
         >
-          {l.toUpperCase()}
+          {l}
         </button>
       ))}
       {isLast && (
         <button
           className={styles.keyboardButton}
+          style={{ width: 'auto', padding: '0 12px' }}
           onClick={() => handleClick('backspace')}
         >
           BACKSPACE

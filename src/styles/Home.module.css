@@ -36,5 +36,11 @@
 }
 
 .keyboard {
+  width: 100%;
+  max-width: 720px;
   margin: 0 auto 30px auto;
+}
+
+.keyboard > div:nth-child(2) {
+  width: 90%;
 }

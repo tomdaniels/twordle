@@ -88,10 +88,12 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
-        <h1>
-          <small className={styles.small}>my clone of</small> Wordle
-        </h1>
-        <div className={styles.divider} />
+        <div>
+          <h1>
+            <small className={styles.small}>my clone of</small> Wordle
+          </h1>
+          <div className={styles.divider} />
+        </div>
 
         <div className={styles.gridWrapper}>
           {rows.map((rowIdx) => {
