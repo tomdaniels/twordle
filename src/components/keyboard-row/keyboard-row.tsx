@@ -1,12 +1,21 @@
 import React from 'react';
+import { withMedia } from 'react-media-query-hoc';
 
 import styles from '../../styles/Keyboard.module.css';
+
+type Media = {
+  mobile: boolean;
+  tablet: boolean;
+  desktop: boolean;
+  largeDesktop: boolean;
+};
 
 type KeyboardRowProps = {
   setColour: Function;
   handleClick: Function;
   letters: string;
   isLast?: boolean;
+  media: Media;
 };
 
 const KeyboardRow: React.FC<KeyboardRowProps> = ({
@@ -14,6 +23,7 @@ const KeyboardRow: React.FC<KeyboardRowProps> = ({
   handleClick,
   letters,
   isLast = false,
+  media,
 }) => {
   return (
     <div className={styles.keyboardRow}>
@@ -42,11 +52,12 @@ const KeyboardRow: React.FC<KeyboardRowProps> = ({
           style={{ width: 'auto', padding: '0 12px' }}
           onClick={() => handleClick('backspace')}
         >
-          BACKSPACE
+          {media.mobile ? 'DEL' : 'BACKSPACE'}
         </button>
       )}
     </div>
   );
 };
 
-export default KeyboardRow;
+export const BaseKeyboardRow = KeyboardRow;
+export default withMedia(BaseKeyboardRow);
