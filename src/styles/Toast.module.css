@@ -8,6 +8,9 @@
 }
 
 .toast {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: lowercase;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +19,7 @@
   background-color: #fff;
   color: #000;
   width: 268px;
-  height: 92px;
+  height: 72px;
   border-radius: 4px;
   opacity: 0.9;
   animation: fadein;

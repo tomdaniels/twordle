@@ -21,9 +21,9 @@ const Toast: React.FC<ToasterProps> = ({ queue }) => {
       {toast?.length &&
         toast.map((n, i) => {
           return (
-            <div key={`toast-${i}`} className={styles.toast}>
+            <p key={`toast-${i}`} className={styles.toast}>
               {n}
-            </div>
+            </p>
           );
         })}
     </div>
