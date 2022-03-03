@@ -8,9 +8,11 @@ import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
 import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
 
+import Toast from '../components/toast/toast';
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
+import handleInvalidEvent from '../utils/handle-invalid-event';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
 let columns: number[] = [0, 1, 2, 3, 4];
@@ -26,6 +28,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [bestColours, setBestColours] = useState<Map<string, string>>(
     () => new Map()
   );
+  const [notifications, notificationStack] = useState<string[]>([]);
   const { words, secret } = useEncryptedList(wordlist);
 
   useEffect(() => {
@@ -51,10 +54,19 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
       return;
     } else if (key === 'enter') {
       if (attempt.length < 5) {
+        handleInvalidEvent(
+          'not enough letters pal',
+          history,
+          notificationStack
+        );
         return;
       }
       if (!words.includes(attempt)) {
-        alert('not in the list m8');
+        handleInvalidEvent(
+          'not in the word list m8',
+          history,
+          notificationStack
+        );
         return;
       }
       animateReveal(secret, attempt, history);
@@ -67,13 +79,14 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
           setBestColours(colours);
         }
       );
-      setAttempt('');
       if (attempt === secret) {
         setStatus('complete');
       }
       if (history.length === 5 && attempt !== secret) {
+        setStatus('complete');
         setTimeout(() => alert(secret + ' ;)'), 1250);
       }
+      setAttempt('');
     } else if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
       animatePress(attempt, history);
       setAttempt((_attempt) => (_attempt += key));
@@ -95,6 +108,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
           <div className={styles.divider} />
         </div>
 
+        <Toast queue={notifications} />
         <div className={styles.gridWrapper}>
           {rows.map((rowIdx) => {
             const rowId = `row-${rowIdx}`;

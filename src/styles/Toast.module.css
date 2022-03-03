@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  margin-top: 78px;
+}
+
+.toast {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: lowercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0;
+  border: none;
+  background-color: #fff;
+  color: #000;
+  width: 268px;
+  height: 72px;
+  border-radius: 4px;
+  opacity: 0.9;
+  animation: fadein;
+  animation-duration: 0.3s;
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
