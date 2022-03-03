@@ -8,6 +8,7 @@ import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
 import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
 
+import Toast from '../components/toast/toast';
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
@@ -27,6 +28,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [bestColours, setBestColours] = useState<Map<string, string>>(
     () => new Map()
   );
+  const [notifications, notificationStack] = useState<string[]>([]);
   const { words, secret } = useEncryptedList(wordlist);
 
   useEffect(() => {
@@ -55,7 +57,11 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         return;
       }
       if (!words.includes(attempt)) {
+        notificationStack((q) => q.concat('not in the wordlist m8'));
         animateInvalid(history);
+        setTimeout(() => {
+          notificationStack((q) => q.slice(0, q.length - 1));
+        }, 1200);
         return;
       }
       animateReveal(secret, attempt, history);
@@ -96,6 +102,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
           <div className={styles.divider} />
         </div>
 
+        <Toast queue={notifications} />
         <div className={styles.gridWrapper}>
           {rows.map((rowIdx) => {
             const rowId = `row-${rowIdx}`;
