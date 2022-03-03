@@ -11,6 +11,7 @@ import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animati
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
+import animateInvalid from '../utils/animate-invalid';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
 let columns: number[] = [0, 1, 2, 3, 4];
@@ -54,7 +55,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         return;
       }
       if (!words.includes(attempt)) {
-        alert('not in the list m8');
+        animateInvalid(history);
         return;
       }
       animateReveal(secret, attempt, history);
