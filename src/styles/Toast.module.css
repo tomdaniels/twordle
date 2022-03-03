@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  margin-top: 64px;
+  opacity: 1;
+}
+
+.toast {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0;
+  border: none;
+  background-color: #fff;
+  color: #000;
+  width: 268px;
+  height: 92px;
+  border-radius: 4px;
+  opacity: 1;
+}
