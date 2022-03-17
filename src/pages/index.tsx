@@ -7,12 +7,14 @@ import animateReveal from '../utils/animate-reveal';
 import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
 import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
+import storageFactory from '../utils/storage';
 
 import Toast from '../components/toast/toast';
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
 import handleInvalidEvent from '../utils/handle-invalid-event';
+import encrypt from '../utils/encrypt';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
 let columns: number[] = [0, 1, 2, 3, 4];
@@ -21,15 +23,22 @@ type WordleProps = {
   wordlist: string;
 };
 
+const store = storageFactory({
+  driver: 'localStorage',
+  name: 'wordle',
+});
+
 const Home: NextPage<WordleProps> = ({ wordlist }) => {
   const [status, setStatus] = useState<'complete' | 'inprogress'>('inprogress');
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<string[]>(
+    () => store.get('history') || []
+  );
   const [attempt, setAttempt] = useState<string>('');
   const [bestColours, setBestColours] = useState<Map<string, string>>(
     () => new Map()
   );
   const [notifications, notificationStack] = useState<string[]>([]);
-  const { words, secret } = useEncryptedList(wordlist);
+  const { words, secret } = useEncryptedList(wordlist, store.get('secret'));
 
   useEffect(() => {
     window.addEventListener('keyup', onKeyPress);
@@ -72,6 +81,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
       animateReveal(secret, attempt, history);
       const nextHistory = [...history, attempt];
       setHistory(nextHistory);
+      store.set('history', nextHistory);
       updateKeyboardAfterAnimation(
         nextHistory,
         secret,
@@ -81,9 +91,13 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
       );
       if (attempt === secret) {
         setStatus('complete');
+        store.remove('history');
+        store.remove('secret');
       }
       if (history.length === 5 && attempt !== secret) {
         setStatus('complete');
+        store.remove('history');
+        store.remove('secret');
         setTimeout(
           () =>
             handleInvalidEvent(
@@ -125,7 +139,18 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
                 {columns.map((colIdx) => {
                   const colId = `cell-${rowIdx}-${colIdx}`;
                   return (
-                    <div id={colId} key={colId} className={styles.cell}>
+                    <div
+                      id={colId}
+                      key={colId}
+                      className={styles.cell}
+                      // {...(store.has('colourMap') &&
+                      //   !!bestColours.get(attempt[colIdx]) && {
+                      //     style: {
+                      //       // persist existing colours if we have 'em
+                      //       backgroundColor: bestColours.get(attempt[colIdx]),
+                      //     },
+                      //   })}
+                    >
                       {history[rowIdx]
                         ? history[rowIdx][colIdx]
                         : rowIdx === history.length
