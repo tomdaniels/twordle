@@ -84,7 +84,15 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
       }
       if (history.length === 5 && attempt !== secret) {
         setStatus('complete');
-        setTimeout(() => alert(secret + ' ;)'), 1250);
+        setTimeout(
+          () =>
+            handleInvalidEvent(
+              `"${secret.toUpperCase()}" ya goose! ;)`,
+              history,
+              notificationStack
+            ),
+          1250
+        );
       }
       setAttempt('');
     } else if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
