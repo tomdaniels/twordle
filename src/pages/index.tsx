@@ -7,14 +7,14 @@ import animateReveal from '../utils/animate-reveal';
 import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
 import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
+import handleInvalidEvent from '../utils/handle-invalid-event';
 import storageFactory from '../utils/storage';
+import encrypt from '../utils/encrypt';
 
 import Toast from '../components/toast/toast';
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
-import handleInvalidEvent from '../utils/handle-invalid-event';
-import encrypt from '../utils/encrypt';
 
 let rows: number[] = [0, 1, 2, 3, 4, 5];
 let columns: number[] = [0, 1, 2, 3, 4];
@@ -45,6 +45,22 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
     return () => {
       window.removeEventListener('keyup', onKeyPress);
     };
+  });
+
+  useEffect(() => {
+    if (store.has('history')) {
+      // persist existing paint on rerender for existing games
+      for (let i = 0; i < history.length; i++) {
+        animateReveal(secret, history[i], i);
+      }
+      updateKeyboardAfterAnimation(
+        history,
+        secret,
+        (colours: Map<string, string>) => {
+          setBestColours(colours);
+        }
+      );
+    }
   });
 
   const onKeyPress = (e: KeyboardEvent): void => {
@@ -78,10 +94,11 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         );
         return;
       }
-      animateReveal(secret, attempt, history);
+      animateReveal(secret, attempt, history.length);
       const nextHistory = [...history, attempt];
       setHistory(nextHistory);
       store.set('history', nextHistory);
+      store.set('secret', encrypt(secret));
       updateKeyboardAfterAnimation(
         nextHistory,
         secret,
@@ -139,18 +156,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
                 {columns.map((colIdx) => {
                   const colId = `cell-${rowIdx}-${colIdx}`;
                   return (
-                    <div
-                      id={colId}
-                      key={colId}
-                      className={styles.cell}
-                      // {...(store.has('colourMap') &&
-                      //   !!bestColours.get(attempt[colIdx]) && {
-                      //     style: {
-                      //       // persist existing colours if we have 'em
-                      //       backgroundColor: bestColours.get(attempt[colIdx]),
-                      //     },
-                      //   })}
-                    >
+                    <div id={colId} key={colId} className={styles.cell}>
                       {history[rowIdx]
                         ? history[rowIdx][colIdx]
                         : rowIdx === history.length
