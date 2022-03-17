@@ -5,7 +5,6 @@ import animations from '../styles/Animations.module.css';
 
 const animateReveal = (secret: string, guess: string, idx: number): void => {
   const row = document.getElementById(`row-${idx}`);
-  console.log(row, secret, guess, idx);
   if (!row) return;
   const letters = row.childNodes as NodeListOf<HTMLElement>;
   for (let i = 0; i < guess.length; i++) {
