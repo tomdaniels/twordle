@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import storageFactory from 'td-storage';
 
 import useEncryptedList from '../utils/use-encrypted-list';
 import animateReveal from '../utils/animate-reveal';
@@ -8,7 +9,6 @@ import animatePress from '../utils/animate-press';
 import getCell from '../utils/get-cell';
 import updateKeyboardAfterAnimation from '../utils/update-keyboard-after-animation';
 import handleInvalidEvent from '../utils/handle-invalid-event';
-import storageFactory from '../utils/storage';
 import encrypt from '../utils/encrypt';
 
 import Toast from '../components/toast/toast';
