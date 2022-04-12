@@ -16,8 +16,9 @@ import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
 
-let rows: number[] = [0, 1, 2, 3, 4, 5];
-let columns: number[] = [0, 1, 2, 3, 4];
+const identity = (_: never, i: number): number => i;
+let rows: number[] = Array.from({ length: 5 }, identity);
+let columns: number[] = Array.from({ length: 5 }, identity);
 
 type WordleProps = {
   wordlist: string;
