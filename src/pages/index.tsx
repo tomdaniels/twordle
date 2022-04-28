@@ -112,19 +112,11 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         store.remove('history');
         store.remove('secret');
       }
-      if (history.length === 5 && attempt !== secret) {
+      if (history.length + 1 === 5 && attempt !== secret) {
         setStatus('complete');
         store.remove('history');
         store.remove('secret');
-        setTimeout(
-          () =>
-            handleInvalidEvent(
-              `"${secret.toUpperCase()}" ya goose! ;)`,
-              history,
-              notificationStack
-            ),
-          1250
-        );
+        setTimeout(() => alert(`"${secret.toUpperCase()}" ya goose! ;)`), 1250);
       }
       setAttempt('');
     } else if (/^[a-z]{1}$/.test(key) && attempt.length < 5) {
