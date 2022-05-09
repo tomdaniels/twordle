@@ -62,7 +62,8 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         }
       );
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onKeyPress = (e: KeyboardEvent): void => {
     if (status === 'complete') return;
