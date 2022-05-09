@@ -113,7 +113,7 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         store.remove('history');
         store.remove('secret');
       }
-      if (history.length + 1 === 5 && attempt !== secret) {
+      if (++history.length === 5 && attempt !== secret) {
         setStatus('complete');
         store.remove('history');
         store.remove('secret');
