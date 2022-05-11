@@ -8,12 +8,12 @@ type AttemptsProps = {
   attempt: string;
 };
 
-export default function Attempts({
+const Attempts: React.FC<AttemptsProps> = ({
   rows,
   columns,
   history,
   attempt,
-}: AttemptsProps) {
+}) => {
   return (
     <div className={styles.gridWrapper}>
       {rows.map((rowIdx) => {
@@ -37,4 +37,6 @@ export default function Attempts({
       })}
     </div>
   );
-}
+};
+
+export default Attempts;
