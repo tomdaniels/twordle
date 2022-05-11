@@ -12,6 +12,7 @@ import handleInvalidEvent from '../utils/handle-invalid-event';
 import encrypt from '../utils/encrypt';
 
 import Toast from '../components/toast/toast';
+import Attempts from '../components/attempts/attempts';
 import KeyboardRow from '../components/keyboard-row/keyboard-row';
 
 import styles from '../styles/Home.module.css';
@@ -142,27 +143,13 @@ const Home: NextPage<WordleProps> = ({ wordlist }) => {
         </div>
 
         <Toast queue={notifications} />
-        <div className={styles.gridWrapper}>
-          {rows.map((rowIdx) => {
-            const rowId = `row-${rowIdx}`;
-            return (
-              <div key={rowId} id={rowId} className={styles.row}>
-                {columns.map((colIdx) => {
-                  const colId = `cell-${rowIdx}-${colIdx}`;
-                  return (
-                    <div id={colId} key={colId} className={styles.cell}>
-                      {history[rowIdx]
-                        ? history[rowIdx][colIdx]
-                        : rowIdx === history.length
-                        ? attempt[colIdx]
-                        : ''}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+        <Attempts
+          rows={rows}
+          columns={columns}
+          history={history}
+          attempt={attempt}
+        />
+
         <div className={styles.keyboard}>
           <KeyboardRow
             letters="qwertyuiop"
